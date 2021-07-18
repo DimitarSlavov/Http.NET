@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace DimSoft.Http
 {
-    internal class DimSoftClient : IDimSoftClient
+    internal class DimSoftHttpClient : IDimSoftHttpClient
     {
         private readonly IHttpClientFactory httpClientFactory;
 
-        public DimSoftClient(IHttpClientFactory httpClientFactory)
+        public DimSoftHttpClient(IHttpClientFactory httpClientFactory)
         {
             this.httpClientFactory = httpClientFactory;
         }
@@ -38,7 +38,7 @@ namespace DimSoft.Http
                     }
                 }
 
-                using var response = await httpClientFactory.CreateClient().SendAsync(httpRequestMessage, cancellationToken);
+                using var response = await GetHttpClient().SendAsync(httpRequestMessage, cancellationToken);
                 using var responseContent = response.Content;
                 using var stream = await responseContent.ReadAsStreamAsync();
                 var content = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
@@ -84,6 +84,11 @@ namespace DimSoft.Http
                     IsError = true
                 };
             }
+        }
+
+        private HttpClient GetHttpClient()
+        {
+            return httpClientFactory.CreateClient(DimSoftHttpClientConstants.HttpClientName);
         }
     }
 }

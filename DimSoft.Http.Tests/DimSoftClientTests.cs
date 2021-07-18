@@ -40,7 +40,7 @@ namespace DimSoft.Http.Tests
                 .Returns(new HttpClient(handlerMock.Object));
 
             //Act
-            var client = new DimSoftClient(factoryMock.Object);
+            var client = new DimSoftHttpClient(factoryMock.Object);
             var result = await client.GetAsync<IEnumerable<string>>(uri.AbsoluteUri);
 
             //Assert
