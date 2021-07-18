@@ -10,33 +10,35 @@ namespace DimSoft.Http
 {
     internal class DimSoftClient : IDimSoftClient
     {
-        private readonly HttpClient httpClient;
+        private readonly IHttpClientFactory httpClientFactory;
 
         public DimSoftClient(IHttpClientFactory httpClientFactory)
         {
-            httpClient = httpClientFactory.CreateClient();
-            if (Uri.TryCreate("", UriKind.Absolute, out var uri))
-            {
-                httpClient.BaseAddress = uri;
-            }
+            this.httpClientFactory = httpClientFactory;
         }
 
-        public async Task<InternalResponse<T>> GetAsync<T>(string requestUri, IDictionary<string, string> headers, IDictionary<string, object> options, CancellationToken cancellationToken)
+        public async Task<InternalResponse<T>> GetAsync<T>(string requestUri, IDictionary<string, string> headers = default, IDictionary<string, object> options = default, CancellationToken cancellationToken = default)
         {
             Func<Task<InternalResponse<T>>> internalMethod = async () =>
             {
                 using var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri);
-                foreach (var header in headers)
+                if (headers is not null)
                 {
-                    httpRequestMessage.Headers.Add(header.Key, header.Value);
+                    foreach (var header in headers)
+                    {
+                        httpRequestMessage.Headers.Add(header.Key, header.Value);
+                    }
                 }
 
-                foreach (var option in options)
+                if (options is not null)
                 {
-                    httpRequestMessage.Options.Set(new HttpRequestOptionsKey<string>(option.Key), option.Value.ToString());
+                    foreach (var option in options)
+                    {
+                        httpRequestMessage.Options.Set(new HttpRequestOptionsKey<string>(option.Key), option.Value.ToString());
+                    }
                 }
 
-                using var response = await httpClient.SendAsync(httpRequestMessage, cancellationToken);
+                using var response = await httpClientFactory.CreateClient().SendAsync(httpRequestMessage, cancellationToken);
                 using var responseContent = response.Content;
                 using var stream = await responseContent.ReadAsStreamAsync();
                 var content = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);

@@ -8,4 +8,10 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+	  <_Parameter1>DimSoft.Http.Tests</_Parameter1>
+	</AssemblyAttribute>
+  </ItemGroup>
+
 </Project>
