@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DimSoft.Http", "DimSoft.Http\DimSoft.Http.csproj", "{B59BFD5D-A473-4C9B-A079-6AB4B9E6DA2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DimSoft.Http.Tests", "DimSoft.Http.Tests\DimSoft.Http.Tests.csproj", "{8B539C0C-065E-4621-B7D6-507A98CC0A8F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B59BFD5D-A473-4C9B-A079-6AB4B9E6DA2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B59BFD5D-A473-4C9B-A079-6AB4B9E6DA2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B59BFD5D-A473-4C9B-A079-6AB4B9E6DA2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B59BFD5D-A473-4C9B-A079-6AB4B9E6DA2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B539C0C-065E-4621-B7D6-507A98CC0A8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B539C0C-065E-4621-B7D6-507A98CC0A8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B539C0C-065E-4621-B7D6-507A98CC0A8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B539C0C-065E-4621-B7D6-507A98CC0A8F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C5EFA8B8-34C1-4D3B-B966-79F613F66985}
+	EndGlobalSection
+EndGlobal
