@@ -7,6 +7,6 @@ namespace DimSoft.Http
 {
     public interface IDimSoftHttpClient
     {
-        Task<InternalResponse<T>> GetAsync<T>(string requestUri, IDictionary<string, string> headers = default, IDictionary<string, object> options = default, CancellationToken cancellationToken = default);
+        Task<InternalResponse<T>> GetAsync<T>(string requestUri, IDictionary<string, string> requestHeaders = default, IDictionary<string, string> contentHeaders = default, IDictionary<string, object> options = default, CancellationToken cancellationToken = default);
     }
 }

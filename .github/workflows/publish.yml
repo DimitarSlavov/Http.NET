@@ -1,0 +1,32 @@
+name: Upload dotnet package
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Trigger workflow
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.REPO_GHA_PAT }}
+          repository: ${{ github.repository }}
+          event-type: trigger-build-workflow
+        if: success()
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+          source-url: https://nuget.pkg.github.com/<owner>/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: dotnet build --configuration Release <my project>
+      - name: Create the package
+        run: dotnet pack --configuration Release <my project>
+      - name: Publish the package to GPR
+        run: dotnet nuget push <my project>/bin/Release/*.nupkg

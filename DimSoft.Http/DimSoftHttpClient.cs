@@ -17,16 +17,24 @@ namespace DimSoft.Http
             this.httpClientFactory = httpClientFactory;
         }
 
-        public async Task<InternalResponse<T>> GetAsync<T>(string requestUri, IDictionary<string, string> headers = default, IDictionary<string, object> options = default, CancellationToken cancellationToken = default)
+        public async Task<InternalResponse<T>> GetAsync<T>(string requestUri, IDictionary<string, string> requestHeaders = default, IDictionary<string, string> contentHeaders = default, IDictionary<string, object> options = default, CancellationToken cancellationToken = default)
         {
             Func<Task<InternalResponse<T>>> internalMethod = async () =>
             {
                 using var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri);
-                if (headers is not null)
+                if (requestHeaders is not null)
                 {
-                    foreach (var header in headers)
+                    foreach (var header in requestHeaders)
                     {
                         httpRequestMessage.Headers.Add(header.Key, header.Value);
+                    }
+                }
+
+                if (contentHeaders is not null)
+                {
+                    foreach (var header in contentHeaders)
+                    {
+                        httpRequestMessage.Content.Headers.Add(header.Key, header.Value);
                     }
                 }
 
