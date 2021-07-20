@@ -11,8 +11,8 @@ jobs:
       packages: write
       contents: read
     steps:
-      - uses: actions/checkout@v2
       - name: Setup .NET
+      - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
@@ -25,7 +25,8 @@ jobs:
         run: dotnet build --no-restore
       - name: Test
         run: dotnet test --no-build --verbosity normal
-      - run: dotnet build --configuration Release DimSoft.Http/DimSoft.Http.csproj
+      - name: Release Build
+        run: dotnet build --configuration Release DimSoft.Http/DimSoft.Http.csproj
       - name: Create the package
         run: dotnet pack --configuration Release DimSoft.Http/DimSoft.Http.csproj
       - name: Publish the package to GPR
