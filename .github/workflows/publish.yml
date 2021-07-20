@@ -11,22 +11,22 @@ jobs:
       packages: write
       contents: read
     steps:
-      - name: Trigger workflow
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.REPO_GHA_PAT }}
-          repository: ${{ github.repository }}
-          event-type: trigger-build-workflow
-        if: success()
+      - name: Setup .NET
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
-          source-url: https://nuget.pkg.github.com/<owner>/index.json
+          source-url: https://nuget.pkg.github.com/DimSoftware/index.json
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: dotnet build --configuration Release <my project>
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      - run: dotnet build --configuration Release DimSoft.Http/DimSoft.Http.csproj
       - name: Create the package
-        run: dotnet pack --configuration Release <my project>
+        run: dotnet pack --configuration Release DimSoft.Http/DimSoft.Http.csproj
       - name: Publish the package to GPR
-        run: dotnet nuget push <my project>/bin/Release/*.nupkg
+        run: dotnet nuget push DimSoft.Http/bin/Release/*.nupkg
