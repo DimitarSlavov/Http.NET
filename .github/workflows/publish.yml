@@ -11,9 +11,9 @@ jobs:
       packages: write
       contents: read
     steps:
-      - name: Setup .NET
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
           source-url: https://nuget.pkg.github.com/DimSoftware/index.json
