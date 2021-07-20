@@ -3,8 +3,6 @@ name: .NET
 on:
   pull_request:
     branches: [ main ]
-  repository_dispatch:
-    types: [trigger-build-workflow]
 
 jobs:
   build:
