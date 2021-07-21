@@ -11,13 +11,16 @@ namespace DimSoft.Http
     internal class DimSoftHttpClient : IDimSoftHttpClient
     {
         private readonly IHttpClientFactory httpClientFactory;
+        private readonly JsonSerializerOptionsGlobal globalOptions;
 
-        public DimSoftHttpClient(IHttpClientFactory httpClientFactory)
+        public DimSoftHttpClient(IHttpClientFactory httpClientFactory,
+            JsonSerializerOptionsGlobal globalOptions)
         {
             this.httpClientFactory = httpClientFactory;
+            this.globalOptions = globalOptions;
         }
 
-        public async Task<InternalResponse<T>> GetAsync<T>(string requestUri, IDictionary<string, string> requestHeaders = default, IDictionary<string, string> contentHeaders = default, IDictionary<string, object> options = default, CancellationToken cancellationToken = default)
+        public async Task<InternalResponse<T>> GetAsync<T>(string requestUri, IDictionary<string, string> requestHeaders = default, JsonSerializerOptions options = default, CancellationToken cancellationToken = default)
         {
             Func<Task<InternalResponse<T>>> internalMethod = async () =>
             {
@@ -30,26 +33,10 @@ namespace DimSoft.Http
                     }
                 }
 
-                if (contentHeaders is not null)
-                {
-                    foreach (var header in contentHeaders)
-                    {
-                        httpRequestMessage.Content.Headers.Add(header.Key, header.Value);
-                    }
-                }
-
-                if (options is not null)
-                {
-                    foreach (var option in options)
-                    {
-                        httpRequestMessage.Options.Set(new HttpRequestOptionsKey<string>(option.Key), option.Value.ToString());
-                    }
-                }
-
                 using var response = await GetHttpClient().SendAsync(httpRequestMessage, cancellationToken);
                 using var responseContent = response.Content;
                 using var stream = await responseContent.ReadAsStreamAsync();
-                var content = await JsonSerializer.DeserializeAsync<T>(stream, cancellationToken: cancellationToken);
+                var content = await JsonSerializer.DeserializeAsync<T>(stream, globalOptions.Value ?? options, cancellationToken: cancellationToken);
                 if (!response.IsSuccessStatusCode)
                 {
                     var internalResponse = new InternalResponse<T>()
